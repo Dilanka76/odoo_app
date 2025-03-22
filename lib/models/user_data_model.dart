@@ -1,33 +1,69 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml_rpc/client.dart' as xml_rpc;
 
-class OdooService {
+class UserDataModel {
   final String url;
-  final String db;
+  final String database;
   final String username;
   final String password;
 
-  OdooService({
+  UserDataModel({
     required this.url,
-    required this.db,
+    required this.database,
     required this.username,
     required this.password,
   });
 
-  // Authenticate and get the user ID (uid)
-  Future<int> authenticate() async {
+  // Authenticate user and get user id
+  Future<int> fetchUserId(BuildContext context) async {
     try {
-      final uid = await xml_rpc.call(
-        Uri.parse('https://skmjcdev-fluttertest-main-19184952.dev.odoo.com/xmlrpc/2/common'),
+       final userId = await xml_rpc.call(
+        Uri.parse('${url}xmlrpc/2/common'),
         'login',
-        ['skmjcdev-fluttertest-main-19184952', 'admin', 'M4BNgeKEFwzJy5V'],
+        [database, username, password],
       );
-      return uid;
+      if(userId != false){
+        // _showSnackbar(context, "isSuccessful" ,"✅ Login successful! Welcome");
+      }
+      return userId;
     } catch (e) {
-      throw Exception('Authentication failed: $e');
+      _showSnackbar(context, "isFailed" ,"⚠️ Sign-in failed. Please check your username and password");
+      return -1;
     }
   }
 
-  // Fetch 10 most recent sale orders
+// fetch user sales order data;
+  Future<List<dynamic>> fetchSalesOrderData(int userId) async {
+    try {
+      final orders = await xml_rpc.call(
+        Uri.parse('${url}xmlrpc/2/object'),
+        'execute_kw',
+        [database, userId, password, 'sale.order', 'search_read', [],
+          {
+            'fields': ['name', 'date_order', 'state','amount_total',],
+            'limit': 10,
+            'order': 'create_date desc',
+          },
+        ],
+      );
+      print("vv....$orders");
+      return orders;
+    } catch (e) {
+      throw Exception('Failed to fetch sale orders: $e');
+    }
+  }
 
+
+}
+void _showSnackbar(BuildContext context,String status , String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message,style: TextStyle(fontWeight: FontWeight.w500,color: Colors.black),),
+      backgroundColor: status ==  "isSuccessful" ? Colors.greenAccent : Colors.redAccent,
+      behavior: SnackBarBehavior.floating, // Makes it a small popup
+      duration: Duration(seconds: 10),
+    ),
+  );
 }

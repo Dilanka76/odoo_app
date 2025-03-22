@@ -4,12 +4,17 @@ class TapButton extends StatefulWidget {
   final String lable;
   final VoidCallback onPressed;
   final Color btnColor;
+  final double circularRadius;
+  final double fontSize;
+
   const TapButton(
       {
         super.key,
         required this.lable,
         required this.onPressed,
         required this.btnColor,
+        required this.circularRadius,
+        required this.fontSize,
       }
       );
 
@@ -24,12 +29,12 @@ class _TapButtonState extends State<TapButton> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(widget.circularRadius),
           color: widget.btnColor
         ),
         child: ElevatedButton(
             onPressed: widget.onPressed,
-            child: Text(widget.lable,style: TextStyle(fontWeight: FontWeight.w700,fontSize:20)),
+            child: Text(widget.lable,style: TextStyle(fontWeight: FontWeight.w700,fontSize:widget.fontSize)),
         ),
       ),
     );

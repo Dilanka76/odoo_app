@@ -3,8 +3,9 @@ import 'package:odoo_app/screens/home_page.dart';
 
 import 'constant/colors.dart';
 
-void main() {
-  runApp(const MyApp());
+void main(){
+  runApp(
+    const MyApp());
 }
 
 class MyApp extends StatelessWidget {
