@@ -2,31 +2,47 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:odoo_app/constant/colors.dart';
+import 'package:odoo_app/providers/user_data.provider.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../screens/sales_order_confirmed.dart';
 
 
 class SalesOrderTable extends StatefulWidget {
-  final Map salesOrderDataList;
-  const SalesOrderTable({super.key,required this.salesOrderDataList});
+  const SalesOrderTable({super.key,});
 
   @override
   State<SalesOrderTable> createState() => _SalesOrderTableState();
 }
 
 class _SalesOrderTableState extends State<SalesOrderTable> {
+
   late DataSource dataSource;
   List<GridColumn> columns = [];
   List <dynamic> loadedDataList = [];
+
   @override
   void initState() {
-    super.initState();
-    addTableData();
     dataSource = DataSource(loadedDataList: loadedDataList);
+    super.initState();
+    Future.microtask(() {
+      final provider = context.read<UserDataProvider>();
+      provider.fetchSalesOrderData(); // Fetch data
+    });
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final provider = context.watch<UserDataProvider>();
+    if (provider.salesOrderDataList.isNotEmpty) {
+      addTableData(provider.salesOrderDataList);
+      setState(() {});
+    }
   }
   @override
   Widget build(BuildContext context) {
+    final userData = Provider.of<UserDataProvider>(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(
@@ -38,12 +54,23 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
           onCellTap: (DataGridCellTapDetails details) {
             int rowIndex = details.rowColumnIndex.rowIndex;
             if (rowIndex > 0) {
+              var rowData = loadedDataList[rowIndex - 1];
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SalesOrderConfirmed()),
-              );
-              var rowData = loadedDataList[rowIndex - 1]; // Adjust index
-              print("Row Clicked: $rowData");
+                MaterialPageRoute(builder: (context) => SalesOrderConfirmed(
+                    orderId:rowData["id"],
+                    status:rowData["state"],
+                    number:rowData["name"],
+                )),
+              ).then((value){
+                if(value !=null){
+                  if(value){
+                    userData.fetchSalesOrderData();
+                    addTableData(userData.salesOrderDataList);
+                    dataSource = DataSource(loadedDataList: loadedDataList);
+                  }
+                }
+              });
             }
           },
         ),
@@ -54,7 +81,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
     columns = [
       GridColumn(
           columnName: "select",
-          width:50.0,
+          width:45.0,
           label: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               color: mainColor,
@@ -106,7 +133,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
       ),
       GridColumn(
           columnName: "status",
-          width:90.0,
+          width:86.0,
           label: Container(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               color: mainColor,
@@ -136,15 +163,16 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
     ];
     return columns;
   }
-  addTableData(){
+  addTableData(list){
+    loadedDataList = [];
     //sort the list from date time
-    widget.salesOrderDataList['sales_order_list'].sort((a, b) {
+    list.sort((a, b) {
       DateTime aNew = DateTime.parse(a['date_order']);
       DateTime bNew = DateTime.parse(b['date_order']);
       return bNew.compareTo(aNew);
     });
 
-    for(dynamic item in widget.salesOrderDataList['sales_order_list']){
+    for(dynamic item in list){
       item['action'] = IconButton(
           onPressed: (){}, icon:Icon(Icons.delete,color: Colors.red,)
       );
@@ -156,24 +184,24 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
       item['number'] = item['name'];
       if(item['state'] == 'sale'){
         item['status'] =  Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           child: Container(
             decoration: BoxDecoration(
               color: CupertinoColors.activeGreen,
               borderRadius: BorderRadius.circular(20)
             ),
-            child: Center(child: Text('Sales Order')),
+            child: Center(child: Text('Sales Order',style: TextStyle(fontSize: 10),)),
           ),
         );
       }else{
         item['status'] = Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           child: Container(
             decoration: BoxDecoration(
                 color: CupertinoColors.activeBlue,
                 borderRadius: BorderRadius.circular(20)
             ),
-            child: Center(child: Text('Quotation')),
+            child: Center(child: Text('Quotation',style: TextStyle(fontSize: 10),)),
           ),
         );;
       }

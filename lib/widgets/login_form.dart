@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:odoo_app/constant/colors.dart';
 import 'package:odoo_app/widgets/reuserble%20widget/formTextField_widget.dart';
 import 'package:odoo_app/widgets/reuserble%20widget/tap_button.dart';
-import '../models/user_data_model.dart';
+import 'package:provider/provider.dart';
+import '../providers/user_data.provider.dart';
 import '../screens/sales_order_screen.dart';
 
 class LoginForm extends StatefulWidget {
@@ -26,7 +26,7 @@ class _LoginFormState extends State<LoginForm> {
   }
   @override
   Widget build(BuildContext context) {
-    //get userData object
+    final userData = Provider.of<UserDataProvider>(context);
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -47,10 +47,11 @@ class _LoginFormState extends State<LoginForm> {
             TapButton(
               lable: "Sing In",
               btnColor: mainColor,
-              circularRadius: 20.0,
               fontSize: 20.0,
+              width: 50,
+              height: 40,
               onPressed: ()async{
-                loginFun(userName : "admin" , password: "M4BNgeKEFwzJy5V");
+                loginFun(context2:context,userData:userData,userName : "admin" , password: "M4BNgeKEFwzJy5V");
               },
             )
           ],
@@ -58,30 +59,28 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
-   loginFun({required String userName , required String password})async{
-    final UserDataModel userData = await UserDataModel(
-      url: 'https://skmjcdev-fluttertest-main-19184952.dev.odoo.com/',
-      database: 'skmjcdev-fluttertest-main-19184952',
-      username: userName,
-      password: password,
-    );
-     final int userId = await userData.fetchUserId(context);
-    Map salesOrderDataList = {};
+   loginFun({required BuildContext context2, required String userName , required String password, required UserDataProvider userData})async{
+     showDialog(
+       context: context2,
+       barrierDismissible: false,
+       builder: (context) {
+         return Center(child: CircularProgressIndicator(
+             valueColor: AlwaysStoppedAnimation<Color>(mainColor),));
+       },
+     );
+     Provider.of<UserDataProvider>(context,listen: false).setUserData(
+         url:'https://skmjcdev-fluttertest-main-19184952.dev.odoo.com/',
+         database :"skmjcdev-fluttertest-main-19184952",
+         userName :userName,
+         password :password
+     );
+      await userData.fetchUserId(context2);
+     final int userId =   userData.userId;
+     Navigator.pop(context2);
     if(userId != -1){
-      List <dynamic> list =await userData.fetchSalesOrderData(userId);
-      // edit the list as my requirment
-
-       salesOrderDataList = {
-        "url":"https://skmjcdev-fluttertest-main-19184952.dev.odoo.com/",
-        "database":"skmjcdev-fluttertest-main-19184952",
-        "username":userName,
-        "password":password,
-        "sales_order_list": []
-      };
-      salesOrderDataList['sales_order_list'] = list;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SalesOrderScreen(salesOrderDataList:salesOrderDataList)),
+        MaterialPageRoute(builder: (context) => SalesOrderScreen()),
       );
     }
   }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:odoo_app/constant/colors.dart';
 
 class TapButton extends StatefulWidget {
   final String lable;
   final VoidCallback onPressed;
   final Color btnColor;
-  final double circularRadius;
+  final double width;
+  final double height;
   final double fontSize;
 
   const TapButton(
@@ -13,7 +15,8 @@ class TapButton extends StatefulWidget {
         required this.lable,
         required this.onPressed,
         required this.btnColor,
-        required this.circularRadius,
+        required this.width,
+        required this.height,
         required this.fontSize,
       }
       );
@@ -27,15 +30,19 @@ class _TapButtonState extends State<TapButton> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.circularRadius),
-          color: widget.btnColor
+      child: ElevatedButton(
+          onPressed: widget.onPressed,
+        style: ElevatedButton.styleFrom(
+          minimumSize: Size(widget.width, widget.height),
+          side: BorderSide(
+            color: mainColor,
+            width: 1,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
-        child: ElevatedButton(
-            onPressed: widget.onPressed,
-            child: Text(widget.lable,style: TextStyle(fontWeight: FontWeight.w700,fontSize:widget.fontSize)),
-        ),
+          child: Text(widget.lable,style: TextStyle(fontWeight: FontWeight.w700,fontSize:widget.fontSize)),
       ),
     );
   }

@@ -4,68 +4,75 @@ import 'package:odoo_app/widgets/reuserble%20widget/tap_button.dart';
 
 import '../../constant/colors.dart';
 
-class SoConfHeader extends StatelessWidget {
-  const SoConfHeader({super.key});
+class SoConfHeader extends StatefulWidget {
+  final String number;
+  final String status;
+  const SoConfHeader({super.key,  required this.number, required this.status});
 
+  @override
+  State<SoConfHeader> createState() => _SoConfHeaderState();
+}
+
+class _SoConfHeaderState extends State<SoConfHeader> {
+  String selectedValue = 'Quotation';
+  @override
+  void initState() {
+    selectedValue =  widget.status == "sale" ?'Sales Order' :'Quotation'  ;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TapButton(
-          lable: "New",
-          btnColor: mainColor,
-          circularRadius: 3.0,
-          fontSize: 20.0,
-          onPressed: ()async{
-          },
-        ),
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Quataion',style: TextStyle(fontSize: 20),),
-            Text('s12222',style: TextStyle(fontSize: 20),),
+            TapButton(
+              lable: "New",
+              btnColor: mainColor,
+              fontSize: 20.0,
+              width: 50,
+              height: 40,
+              onPressed: ()async{
+              },
+            ),
+            Text("Quotation",style: TextStyle(fontSize: 20,color: CupertinoColors.activeBlue)),
+            Text(widget.number,style: TextStyle(fontSize: 20),),
+            IconButton(onPressed: (){}, icon:Icon(Icons.settings)),
           ],
         ),
-        IconButton(
-            onPressed: (){
-
-            }, icon:Icon(Icons.settings)),
-        SizedBox(width: 70,),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 45),
-          child: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all( // Outline border
-                  color: Colors.black, // Border color
-                  width: 1, // Border thickness
-                ),
+            SizedBox(
+              width: 170,
+              child: RadioListTile<String>(
+                title: Text("Quotation"),
+                value: "Quotation",
+                groupValue: selectedValue,
+                onChanged: (value) {
+                },
               ),
-              child: Text('Quataion'),
             ),
-            SizedBox(height: 5,),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all( // Outline border
-                  color: Colors.black, // Border color
-                  width: 1, // Border thickness
-                ),
+            SizedBox(
+              width: 190,
+              child: RadioListTile<String>(
+                title: Text("Quotation Sent"),
+                value: "Quotation Sent",
+                groupValue: selectedValue,
+                onChanged: (value) {
+                },
               ),
-              child: Text('Quataion Sent'),
             ),
-            SizedBox(height: 5,),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all( // Outline border
-                  color: Colors.black, // Border color
-                  width: 1, // Border thickness
-                ),
+            SizedBox(
+              width: 170,
+              child: RadioListTile<String>(
+                title: Text("Sales Order"),
+                value: "Sales Order",
+                groupValue: selectedValue,
+                onChanged: (value) {
+                },
               ),
-              child: Text('Sales Order'),
             ),
           ],
         )

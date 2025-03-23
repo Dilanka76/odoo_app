@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:odoo_app/providers/user_data.provider.dart';
 import 'package:odoo_app/screens/home_page.dart';
+import 'package:provider/provider.dart';
 
 import 'constant/colors.dart';
 
-void main(){
+void main() {
   runApp(
-    const MyApp());
+    ChangeNotifierProvider(
+      create: (context) => UserDataProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

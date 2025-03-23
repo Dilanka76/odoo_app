@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SoConfCstomer extends StatefulWidget {
-   SoConfCstomer({super.key});
+  final String number;
+   SoConfCstomer({super.key, required this.number});
 
   @override
   State<SoConfCstomer> createState() => _SoConfCstomerState();
@@ -16,7 +17,7 @@ class _SoConfCstomerState extends State<SoConfCstomer> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('s12222',style: TextStyle(fontSize: 50),),
+        Text(widget.number,style: TextStyle(fontSize: 50),),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

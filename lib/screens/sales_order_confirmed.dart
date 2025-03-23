@@ -9,7 +9,10 @@ import '../widgets/so confirmed screen widget/so_conf_header_section.dart';
 import '../widgets/so confirmed screen widget/so_conf_tabBar_section.dart';
 
 class SalesOrderConfirmed extends StatefulWidget {
-  const SalesOrderConfirmed({super.key});
+  final int orderId;
+  final String status;
+  final String number;
+  const SalesOrderConfirmed({super.key,required this.orderId, required this.status, required this.number});
 
   @override
   State<SalesOrderConfirmed> createState() => _SalesOrderConfirmedState();
@@ -25,11 +28,19 @@ class _SalesOrderConfirmedState extends State<SalesOrderConfirmed> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SoConfHeader(),
+              SoConfHeader(
+                number: widget.number,
+                status: widget.status,
+              ),
               Divider(),
-              SoConfAction(),
+              SoConfAction(
+                  status:widget.status,
+                orderId: widget.orderId,
+              ),
               Divider(),
-              SoConfCstomer(),
+              SoConfCstomer(
+                number: widget.number,
+              ),
               Divider(),
               SoConfTabBar()
             ],
