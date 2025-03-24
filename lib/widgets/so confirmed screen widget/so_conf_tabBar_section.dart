@@ -41,9 +41,9 @@ class _SoConfTabBarState extends State<SoConfTabBar>  with SingleTickerProviderS
               child: TabBar(
                 labelColor: mainColor,
                 tabs: [
-                  Tab(child: Text("Order Lines", )),
-                  Tab(child: Text("Optional Products",)),
-                  Tab(child: Text("Other info",)),
+                  Tab(child: Text("Order Lines", style: TextStyle(fontSize:15),)),
+                  Tab(child: Text("Optional Products", style: TextStyle(fontSize:15),)),
+                  Tab(child: Text("Other info", style: TextStyle(fontSize:15),)),
                 ],
               ),
             ),

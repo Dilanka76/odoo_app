@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:odoo_app/constant/sizes.dart';
 import 'package:odoo_app/widgets/right_Drawer.dart';
 import '../constant/colors.dart';
+import '../widgets/app_bar.dart';
 import '../widgets/left_drawer.dart';
 import '../widgets/reuserble widget/tap_button.dart';
 import '../widgets/sales_order_table.dart';
@@ -22,64 +24,7 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          leading: Builder(
-            builder: (context) {
-              return IconButton(
-                  onPressed: (){
-                    Scaffold.of(context).openDrawer();
-                    setState(() {
-                    });
-                  }, icon: Icon(Icons.menu,size: 40,));
-            }
-          ),
-          title: Text('Sales Orders',style: TextStyle(fontWeight:FontWeight.w700,fontSize: 30)),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 125,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: IconButton(
-                          onPressed: (){},
-                          icon: Icon(Icons.message)
-                      ),
-                    ),
-                    Expanded(
-                      child: IconButton(
-                          onPressed: (){},
-                          icon: Icon(Icons.alarm)
-                      ),
-                    ),
-                    Expanded(
-                      child: Builder(
-                        builder: (context) {
-                          return GestureDetector(
-                            onTap: (){
-                              Scaffold.of(context).openEndDrawer();
-                            },
-                            child: Container(
-                              height: 30,
-                              decoration: BoxDecoration(
-                                color: mainColor,
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                              child:Center(child: Text("A",style: TextStyle(fontWeight:FontWeight.w700,fontSize: 25),))
-                              ,
-                            ),
-                          );
-                        }
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-
-          ],
-        ),
+        appBar:AppBarSection(topic: "Sales Orders",),
             drawer:  Drawer(child: LeftDrawer()),
           endDrawer: Drawer(child: RightDrawer(),),
           body: Padding(
@@ -93,7 +38,7 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
                   TapButton(
                     lable: "New",
                     btnColor: mainColor,
-                    fontSize: 20.0,
+                    fontSize: txtNormal,
                     width: 50,
                     height: 40,
                     onPressed: ()async{

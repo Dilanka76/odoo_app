@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/colors.dart';
+import '../widgets/app_bar.dart';
+import '../widgets/left_drawer.dart';
 import '../widgets/reuserble widget/tap_button.dart';
+import '../widgets/right_Drawer.dart';
 import '../widgets/so confirmed screen widget/so_conf_action_section.dart';
 import '../widgets/so confirmed screen widget/so_conf_customer_section.dart';
 import '../widgets/so confirmed screen widget/so_conf_header_section.dart';
@@ -23,11 +26,15 @@ class _SalesOrderConfirmedState extends State<SalesOrderConfirmed> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar:AppBarSection(topic: widget.status == "sale" ? "Create Invoice" : "Confirm Order",),
+        drawer:  Drawer(child: LeftDrawer()),
+        endDrawer: Drawer(child: RightDrawer(),),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Divider(),
               SoConfHeader(
                 number: widget.number,
                 status: widget.status,

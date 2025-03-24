@@ -39,6 +39,8 @@ dependencies:
   syncfusion_flutter_datagrid: ^28.2.12
   intl: ^0.18.1
   provider: ^6.1.2
+  lock_orientation_screen: ^0.0.4
+  smooth_page_indicator: ^1.2.1
 
 
 dev_dependencies:

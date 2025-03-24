@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lock_orientation_screen/lock_orientation_screen.dart';
 import 'package:odoo_app/providers/user_data.provider.dart';
 import 'package:odoo_app/screens/home_page.dart';
+import 'package:odoo_app/screens/onbording_screen.dart';
 import 'package:provider/provider.dart';
-
 import 'constant/colors.dart';
 
 void main() {
@@ -19,14 +20,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Odoo Orders App',
-      theme: ThemeData(
-        primaryColor: mainColor,
-        colorScheme: ColorScheme.fromSeed(seedColor: mainColor),
+    return LockOrientation(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Odoo Orders App',
+        theme: ThemeData(
+          primaryColor: Color(0xFF6A0DAD),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF6A0DAD)),
+        ),
+        home: const OnbordingScreen(),
       ),
-      home: const MyHomePage(),
     );
   }
 }

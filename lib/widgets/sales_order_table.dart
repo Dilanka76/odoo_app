@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:odoo_app/constant/colors.dart';
 import 'package:odoo_app/providers/user_data.provider.dart';
+import 'package:odoo_app/widgets/reuserble%20widget/tap_button.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:xml_rpc/client_c.dart' as xml_rpc;
 
+import '../constant/sizes.dart';
 import '../screens/sales_order_confirmed.dart';
 
 
@@ -36,7 +39,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
     super.didChangeDependencies();
     final provider = context.watch<UserDataProvider>();
     if (provider.salesOrderDataList.isNotEmpty) {
-      addTableData(provider.salesOrderDataList);
+      addTableData(provider);
       setState(() {});
     }
   }
@@ -66,7 +69,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
                 if(value !=null){
                   if(value){
                     userData.fetchSalesOrderData();
-                    addTableData(userData.salesOrderDataList);
+                    addTableData(userData);
                     dataSource = DataSource(loadedDataList: loadedDataList);
                   }
                 }
@@ -98,7 +101,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
               alignment: Alignment.centerLeft,
               child: const Text(
                 "Num",
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),
+                style: TextStyle(fontWeight: FontWeight.w800),
                 softWrap: false,
               )
           )
@@ -112,7 +115,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
               alignment: Alignment.centerLeft,
               child: const Text(
                 "Create Date",
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),
+                style: TextStyle(fontWeight: FontWeight.w800),
                 softWrap: false,
               )
           )
@@ -126,7 +129,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
               alignment: Alignment.centerRight,
               child: const Text(
                 "Total",
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),
+                style: TextStyle(fontWeight: FontWeight.w800),
                 softWrap: false,
               )
           )
@@ -140,7 +143,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
               alignment: Alignment.center,
               child: const Text(
                 "Status",
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),
+                style: TextStyle(fontWeight: FontWeight.w800),
                 softWrap: false,
               )
           )
@@ -154,7 +157,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
               alignment: Alignment.center,
               child: const Text(
                 "Action",
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),
+                style: TextStyle(fontWeight: FontWeight.w800),
                 softWrap: false,
               )
           )
@@ -163,18 +166,27 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
     ];
     return columns;
   }
-  addTableData(list){
+  addTableData(UserDataProvider userData){
     loadedDataList = [];
     //sort the list from date time
-    list.sort((a, b) {
+    userData.salesOrderDataList.sort((a, b) {
       DateTime aNew = DateTime.parse(a['date_order']);
       DateTime bNew = DateTime.parse(b['date_order']);
       return bNew.compareTo(aNew);
     });
 
-    for(dynamic item in list){
+    int index = 0;
+    for(dynamic item in userData.salesOrderDataList){
+      index = loadedDataList.length;
       item['action'] = IconButton(
-          onPressed: (){}, icon:Icon(Icons.delete,color: Colors.red,)
+          onPressed: (){
+            //confirmed the delete order
+            if(item["state"] != "sale"){
+              ShowdialogPopup(context,userData,item["id"]);
+            }else{
+              _showSnackbar(context, "isFaild" ,"Can't delete confirmed sales order !");
+            }
+          }, icon:Icon(Icons.delete,color: Colors.red,)
       );
 
       // format the date
@@ -208,6 +220,103 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
       loadedDataList.add(item);
     }
     dataSource = DataSource(loadedDataList: loadedDataList);
+  }
+  // delete the sales order before it confirmed
+  Future<bool> deleteSalesOrder(String url , String password, String database, int userId , int orderId ,UserDataProvider userData) async {
+    try {
+      final response = await xml_rpc.call(
+        Uri.parse('${url}xmlrpc/2/object'),
+        'execute_kw',
+        [
+          database,
+          userId,
+          password,
+          'sale.order',
+          'unlink',
+          [[orderId]],
+        ],
+      );
+      if(response){
+        _showSnackbar(context, "isSuccessful" ,"Successfully Deleted the order !");
+        userData.fetchSalesOrderData();
+        addTableData(userData);
+        dataSource = DataSource(loadedDataList: loadedDataList);
+      }
+      return response;
+
+    } catch (e) {
+      return false;
+    }
+  }
+  void ShowdialogPopup(BuildContext context,UserDataProvider userData,orderId) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Color(0xD0BA8DAD),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5)
+          ),
+          child: SizedBox(
+            width: 300,
+            height: 103,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text("Delete Order ?",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 30),),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TapButton(
+                      lable: "Confirm",
+                      btnColor: mainColor,
+                      fontSize: txtNormal,
+                      width: 40,
+                      height: 20,
+                      onPressed: () {
+                        deleteSalesOrder(
+                            userData.url,
+                            userData.password,
+                            userData.database,
+                            userData.userId,
+                            orderId,
+                            userData
+                        );
+                        Navigator.of(context).pop();
+                      },
+
+                    ),
+                    TapButton(
+                      lable: "Cancel",
+                      btnColor: mainColor,
+                      fontSize: txtNormal,
+                      width: 40,
+                      height: 20,
+                      onPressed: ()async{
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],)
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  void _showSnackbar(BuildContext context,String status , String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message,style: TextStyle(fontWeight: FontWeight.w500,color: Colors.black),),
+        backgroundColor: status ==  "isSuccessful" ? Colors.greenAccent : Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }
 class DataSource extends DataGridSource {

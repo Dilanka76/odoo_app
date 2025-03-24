@@ -3,6 +3,7 @@ import 'package:odoo_app/constant/colors.dart';
 import 'package:odoo_app/widgets/reuserble%20widget/formTextField_widget.dart';
 import 'package:odoo_app/widgets/reuserble%20widget/tap_button.dart';
 import 'package:provider/provider.dart';
+import '../constant/sizes.dart';
 import '../providers/user_data.provider.dart';
 import '../screens/sales_order_screen.dart';
 
@@ -47,7 +48,7 @@ class _LoginFormState extends State<LoginForm> {
             TapButton(
               lable: "Sing In",
               btnColor: mainColor,
-              fontSize: 20.0,
+              fontSize: txtNormal,
               width: 50,
               height: 40,
               onPressed: ()async{

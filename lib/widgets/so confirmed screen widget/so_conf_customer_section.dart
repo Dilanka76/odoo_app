@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:odoo_app/constant/sizes.dart';
 
 class SoConfCstomer extends StatefulWidget {
   final String number;
@@ -17,7 +18,7 @@ class _SoConfCstomerState extends State<SoConfCstomer> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.number,style: TextStyle(fontSize: 50),),
+        Text(widget.number,style: TextStyle(fontSize: txtTopic),),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -48,12 +49,6 @@ class _SoConfCstomerState extends State<SoConfCstomer> {
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-          ],
-        ),
-
       ],
     );
   }
