@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:odoo_app/constant/sizes.dart';
 
@@ -9,7 +8,6 @@ class SoConfCstomer extends StatefulWidget {
   @override
   State<SoConfCstomer> createState() => _SoConfCstomerState();
 }
-
 class _SoConfCstomerState extends State<SoConfCstomer> {
   String selectedValue = 'Test Customer';
 

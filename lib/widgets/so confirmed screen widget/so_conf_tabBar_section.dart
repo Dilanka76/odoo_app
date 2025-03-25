@@ -1,19 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:odoo_app/widgets/so%20confirmed%20screen%20widget/so_conf_optionalPro_tab.dart';
 import 'package:odoo_app/widgets/so%20confirmed%20screen%20widget/so_conf_orderLine_tab.dart';
 import 'package:odoo_app/widgets/so%20confirmed%20screen%20widget/so_conf_otheInfoTab.dart';
-
 import '../../constant/colors.dart';
 
 class SoConfTabBar extends StatefulWidget {
   const SoConfTabBar({super.key});
 
   @override
-
   State<SoConfTabBar> createState() => _SoConfTabBarState();
 }
-
 class _SoConfTabBarState extends State<SoConfTabBar>  with SingleTickerProviderStateMixin{
   late final TabController _tabController;
   @override
@@ -27,7 +23,6 @@ class _SoConfTabBarState extends State<SoConfTabBar>  with SingleTickerProviderS
     super.dispose();
   }
   @override
-
   Widget build(BuildContext context) {
     return  Container(
       height: MediaQuery.of(context).size.height * 0.35,

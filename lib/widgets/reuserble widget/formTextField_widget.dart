@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class FormTextField extends StatefulWidget {
@@ -20,6 +19,7 @@ class _FormTextFieldState extends State<FormTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: false,
       controller: widget.controller,
       keyboardType: setKeybordType(widget.type),
       obscureText: widget.type == FormTextFieldType.password ? true :false,

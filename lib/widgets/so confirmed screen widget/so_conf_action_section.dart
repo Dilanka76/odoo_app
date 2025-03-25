@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:odoo_app/providers/user_data.provider.dart';
 import 'package:odoo_app/widgets/reuserble%20widget/tap_button.dart';
@@ -10,7 +9,8 @@ import '../../constant/sizes.dart';
 class SoConfAction extends StatefulWidget {
   final int orderId;
   final String status;
-  const SoConfAction({super.key, required this.orderId, required this.status});
+  final String number;
+  const SoConfAction({super.key, required this.orderId, required this.status, required this.number});
   @override
   State<SoConfAction> createState() => _SoConfActionState();
 }
@@ -85,7 +85,7 @@ class _SoConfActionState extends State<SoConfAction> {
       );
       print("Sale Order Confirmed Successfully");
       if(response){
-        _showSnackbar(context, "isSuccessful" ," Sale Order Confirmed Successfully");
+        _showSnackbar(context, "isSuccessful" ,"✅ Sale Order Confirmed Successfully !");
       }else{
         _showSnackbar(context, "isFailed" ,"⚠️ Failed to confirm Sale Order");
       }
@@ -113,7 +113,7 @@ class _SoConfActionState extends State<SoConfAction> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text("Confirmed Order ?",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 30),),
+                  child: Text(" ${widget.number} Confirm Order ?",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 25),),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -153,7 +153,6 @@ class _SoConfActionState extends State<SoConfAction> {
       },
     );
   }
-
   void _showSnackbar(BuildContext context,String status , String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -169,5 +168,4 @@ class _SoConfActionState extends State<SoConfAction> {
       });
     }
   }
-
 }

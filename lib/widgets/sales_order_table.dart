@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:odoo_app/constant/colors.dart';
@@ -7,10 +6,8 @@ import 'package:odoo_app/widgets/reuserble%20widget/tap_button.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:xml_rpc/client_c.dart' as xml_rpc;
-
 import '../constant/sizes.dart';
 import '../screens/sales_order_confirmed.dart';
-
 
 class SalesOrderTable extends StatefulWidget {
   const SalesOrderTable({super.key,});
@@ -174,19 +171,17 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
       DateTime bNew = DateTime.parse(b['date_order']);
       return bNew.compareTo(aNew);
     });
-
-    int index = 0;
     for(dynamic item in userData.salesOrderDataList){
-      index = loadedDataList.length;
+
       item['action'] = IconButton(
           onPressed: (){
             //confirmed the delete order
             if(item["state"] != "sale"){
-              ShowdialogPopup(context,userData,item["id"]);
+              ShowdialogPopup(context,userData,item["id"],item["name"]);
             }else{
-              _showSnackbar(context, "isFaild" ,"Can't delete confirmed sales order !");
+              _showSnackbar(context, "isFaild" ,"⚠️ Can't delete confirmed sales order !");
             }
-          }, icon:Icon(Icons.delete,color: Colors.red,)
+          }, icon:Icon(Icons.delete,color: Colors.redAccent,)
       );
 
       // format the date
@@ -199,7 +194,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
           padding: const EdgeInsets.all(12.0),
           child: Container(
             decoration: BoxDecoration(
-              color: CupertinoColors.activeGreen,
+                color: Colors.greenAccent,
               borderRadius: BorderRadius.circular(20)
             ),
             child: Center(child: Text('Sales Order',style: TextStyle(fontSize: 10),)),
@@ -210,7 +205,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
           padding: const EdgeInsets.all(12.0),
           child: Container(
             decoration: BoxDecoration(
-                color: CupertinoColors.activeBlue,
+                color: Colors.blueAccent,
                 borderRadius: BorderRadius.circular(20)
             ),
             child: Center(child: Text('Quotation',style: TextStyle(fontSize: 10),)),
@@ -237,7 +232,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
         ],
       );
       if(response){
-        _showSnackbar(context, "isSuccessful" ,"Successfully Deleted the order !");
+        _showSnackbar(context, "isSuccessful" ,"✅ Successfully Deleted the order !");
         userData.fetchSalesOrderData();
         addTableData(userData);
         dataSource = DataSource(loadedDataList: loadedDataList);
@@ -248,7 +243,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
       return false;
     }
   }
-  void ShowdialogPopup(BuildContext context,UserDataProvider userData,orderId) {
+  void ShowdialogPopup(BuildContext context,UserDataProvider userData,orderId,number) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -266,7 +261,7 @@ class _SalesOrderTableState extends State<SalesOrderTable> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text("Delete Order ?",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 30),),
+                  child: Text("$number Delete Order ?",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 25),),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -377,7 +372,7 @@ class DataSource extends DataGridSource {
             return Container(
               alignment: Alignment.centerRight,
               padding: EdgeInsets.all(8.0),
-              child: Text(e.value.toString(),overflow: TextOverflow.ellipsis,style: TextStyle(color: CupertinoColors.activeBlue,),),
+              child: Text(e.value.toString(),overflow: TextOverflow.ellipsis,style: TextStyle(color:  Colors.blueAccent,),),
             );
           }
           else{

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../constant/colors.dart';
 import '../constant/sizes.dart';
 
@@ -13,7 +12,6 @@ class AppBarSection extends StatefulWidget implements PreferredSizeWidget{
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
-
 class _AppBarSectionState extends State<AppBarSection> {
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,6 @@ class _AppBarSectionState extends State<AppBarSection> {
               ),
             ),
           )
-
         ],
       ),
     );

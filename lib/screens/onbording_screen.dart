@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:odoo_app/constant/colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../constant/sizes.dart';
 import '../widgets/reuserble widget/tap_button.dart';
 import 'home_page.dart';
@@ -14,7 +12,7 @@ class OnbordingScreen extends StatefulWidget {
   State<OnbordingScreen> createState() => _OnbordingScreenState();
 }
 final PageController controller = PageController();
-int currentIndexPage = 0;
+bool isGetsartedPage = false;
 class _OnbordingScreenState extends State<OnbordingScreen> {
   @override
   Widget build(BuildContext context) {
@@ -27,22 +25,29 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                 SizedBox(
                   child: PageView(
                     onPageChanged: (index){
-                      currentIndexPage = index;
+                      isGetsartedPage = index ==1 ?true : false;
+                      setState(() {});
                     },
                     controller: controller,
                     children: [
                       Container(
                         color: mainColor,
-                        child: ClipRect(
-                            child: Image.asset(fit: BoxFit.cover,"assets/ab3.jpg")
+                        child: Column(
+                          children: [
+                            Image.asset("assets/loginImage.png"),
+                            Image.asset("assets/oa6.jpg"),
+                          ],
                         ),
                       ),
                       Container(
                         color: mainColor,
-                        child: ClipRect(
-                            child: Image.asset(fit: BoxFit.cover,"assets/ob2.jpg")
-                        )
-                      )
+                        child: Column(
+                          children: [
+                            Image.asset("assets/loginImage.png"),
+                            Image.asset("assets/oa7.jpg"),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -50,26 +55,29 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                   bottom: 50,
                   left: 0,
                   right: 0,
-                  child: TapButton(
-                    lable: "Get Started",
+                  child: isGetsartedPage ?  TapButton(
+                    lable:"Get Started",
                     btnColor: mainColor,
                     fontSize: txtNormal,
                     width: 20,
                     height: 40,
                     onPressed: ()async{
-                      currentIndexPage++;
-                      if(currentIndexPage <1){
-                        controller.animateToPage(
-                            currentIndexPage,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut
-                        );
-                      }else{
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyHomePage()),
-                        );
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyHomePage()),
+                      );
+                    },
+                  ): TapButton(
+                    lable: "Next",
+                    btnColor: mainColor,
+                    fontSize: txtNormal,
+                    width: 20,
+                    height: 40,
+                    onPressed: ()async{
+                      controller.animateToPage(
+                        controller.page!.toInt()+1,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut);
                           setState(() {});
                     },
                   ),
@@ -91,11 +99,8 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                     ),
                   ),
                 ),
-
-
               ],
             ),
-
           )
         ],
       ),

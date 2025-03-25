@@ -1,10 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../constant/colors.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/left_drawer.dart';
-import '../widgets/reuserble widget/tap_button.dart';
 import '../widgets/right_Drawer.dart';
 import '../widgets/so confirmed screen widget/so_conf_action_section.dart';
 import '../widgets/so confirmed screen widget/so_conf_customer_section.dart';
@@ -43,6 +39,7 @@ class _SalesOrderConfirmedState extends State<SalesOrderConfirmed> {
               SoConfAction(
                   status:widget.status,
                 orderId: widget.orderId,
+                number: widget.number,
               ),
               Divider(),
               SoConfCstomer(

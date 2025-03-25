@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:odoo_app/constant/sizes.dart';
 import 'package:odoo_app/widgets/right_Drawer.dart';
@@ -56,6 +55,4 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
       ),
     );
   }
-  // add the sales orders to the table
-
 }

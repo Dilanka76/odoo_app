@@ -19,10 +19,10 @@ class MyHomePage extends StatelessWidget {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1), // Soft shadow
+                  color: Colors.black.withOpacity(0.1),
                   blurRadius: 10,
                   spreadRadius: 2,
-                  offset: Offset(0, 5), // Slightly below
+                  offset: Offset(0, 5),
                 ),
               ],
             ),

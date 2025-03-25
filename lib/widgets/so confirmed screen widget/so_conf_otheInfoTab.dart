@@ -1,38 +1,37 @@
 import 'package:flutter/cupertino.dart';
 
+import '../../models data/so_cong_info_data.dart';
+
 class SoConfOtheinfotab extends StatelessWidget {
   const SoConfOtheinfotab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    SoConfInfoDataSales soConfInfoDataSales = SoConfInfoDataSales();
+    SoConfInfoDataInvoicing soConfInfoDataInvoicing = SoConfInfoDataInvoicing();
     return   Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("SALES",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 20),),
-                Text('Sales Person',style: TextStyle(fontSize: 20),),
-                Text('Sales Team',style: TextStyle(fontSize: 20),),
-                Text('Online Signature',style: TextStyle(fontSize: 20),),
-                Text('Online Payment',style: TextStyle(fontSize: 20),),
-                Text('Customer Referance',style: TextStyle(fontSize: 20),),
-                Text('Tags',style: TextStyle(fontSize: 20),),
-                Text('Shipping',style: TextStyle(fontSize: 20),),
-                Text('Delivery Date',style: TextStyle(fontSize: 20),),
-              ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: soConfInfoDataSales.soConfDataListSales.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final item = soConfInfoDataSales.soConfDataListSales[index];
+                  FontWeight type = item.itemName == "SALES" ? FontWeight.w700:FontWeight.normal;
+                    return Text(item.itemName,style: TextStyle(fontSize: 20,fontWeight:type),);
+                },
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("INVOICING",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 20),),
-                Text('Fiscal Position',style: TextStyle(fontSize: 20),),
-                Text('Tracking',style: TextStyle(fontSize: 20),),
-                Text('Source Documents',style: TextStyle(fontSize: 20),),
-                Text('Campaign',style: TextStyle(fontSize: 20),),
-                Text('Medium',style: TextStyle(fontSize: 20),),
-                Text('Source',style: TextStyle(fontSize: 20),),
-              ],
+            SizedBox(width: 70,),
+            Expanded(
+              child: ListView.builder(
+                itemCount: soConfInfoDataInvoicing.soConfDataListInvoicing.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final item = soConfInfoDataInvoicing.soConfDataListInvoicing[index];
+                  FontWeight type = item.itemName == "INVOICING" ? FontWeight.w700:FontWeight.normal;
+                  return Text(item.itemName,style: TextStyle(fontSize: 20,fontWeight:type),);
+                },
+              ),
             ),
         ],
     );
